@@ -1,0 +1,111 @@
+//para inicializar en la consola
+//--CONSOLE--
+1) cd rutaCARPETA
+2) npm init
+//....
+//luego te pide estos datos, debemos hacer enter a medida que los pode. 
+// package name: (boilerplate)
+// version: (1.0.0)
+// description: Boilerplate React
+// entry point: (index.js)
+// test command:
+// git repository:
+// keywords:
+// author: Sofia Borgonovo
+// license: (ISC)
+// About to write to C:\Users\c.sborgo\Documents\BOILERPLATE\package.json:
+//posteriormente te GENERA un package.json en la carpeta donde estamos
+// {
+//   "name": "boilerplate",
+//   "version": "1.0.0",
+//   "description": "Boilerplate React",
+//   "main": "index.js",
+//   "scripts": {
+//     "test": "echo \"Error: no test specified\" && exit 1"
+//   },
+//   "author": "Sofia Borgonovo",
+//   "license": "ISC"
+// }
+3. CREAMOS LA CARPETA src y adentro metemos el index.html y index.js
+
+//WEB PACK --> MANEJADOR DE PAQUETES Y COMPILADOR DE CODIGO. 
+// -D --> instala solo en ambientes de desarrollo ya que no es necesario en otros ambientes
+//--CONSOLE
+//webpack - permite configurar la aplicacion
+//webpack-cli - va a permitir utilizar webpack en la consola de comandos
+//webpack-dev-server --> para recargar la pantalla en la cual trabajamos - para evitar el F5
+4. npm i -D webpack webpack-cli webpack-dev-server
+
+// se va a crear un package-lock.json --> este archivo es donde van todas las dependencias
+// que son solo para desarrollo
+// en el package.json se va a agregar "devDependencies", alli se recomienda eliminar el 
+// simbolo ^, que indica que cuando haya actualizaciones de los paquetes
+// se instalen por defecto, si le sacaoms el simbolo forzamos a instalarlo de forma manual 
+// para evitar bugs
+
+5. creamos el webpack.config.js 
+const path = require('path');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+
+module.exports = {
+    // manera en la que se compilará el output
+    mode: 'development',
+    // que es lo que tiene que compilar
+    entry: path.join(__dirname, "src", "index.js"),
+    // donde dejar la version complada
+    output: {
+        path: path.resolve(__dirname, "dist"),
+    },
+    plugins: [
+        new HtmlWebpackPlugin({
+            template: path.join(__dirname, "src", "index.html"),
+        }),
+    ],
+}
+6. lo configuramos
+7. Instalamos html-webpack-plugin
+npm i -D html-webpack-plugin
+
+//Si da algun error raro, limpiar la cache con --> npm cache clean --force
+
+8. Para ver alco corremos:
+npm run webpack 
+npm start
+// En este momento nos abre el navegador que parece vacio pero si vemos la consola de navegador
+// podemos ver 
+9.Instalamos Babel que es para traspilar el codigo JS en un codigo JS compatible con todos los navegadores
+npm install -D @babel/core babel-loader
+10. Instalamos REAC, en este caso si van al proyecto y no solo a desarrollo
+ npm install -S react react-dom
+11. Agregamos la seccion de module en el webpack.confing.js
+    
+    module: {
+        rules: [
+            {
+                test: /\.?js$/,
+                exclude: /node_modules/,
+                use: {
+                    loader: "babel-loader",
+                    options: {
+                        presets: ['@babel/preset-env','@babel/preset-react']
+                    }
+                }
+            },
+        ]
+    },
+// el tutorial continua pero a este momento ya podriamos visualizar la informacion. 
+
+12. Completamos el index.js pero aun nos faltan otros paquetes para que babel interpete el codigo react
+npm install @babel/core babel-loader --save-dev
+npm install @babel/present-env @babel/preset-react --save-dev
+npm i -D style-loader css-loader file-loader
+npm i -D @svgr/webpack
+13. Agregamos as configuraciones al webpack.
+14. Creamos y configuramos el .babelrc
+
+Comentarios:
+* Dentro del package.json tenemos devDependencies y dependencies. La diferencia es que:
+   - devDependencies: son paquetes que necesitamos para correr el proyecto local pero que no son necesarios para el navegador. Se van  a utilizar para compilar el codigo y traducirlo en css, js y html puro para le navegador. 
+   - dependencies: son los paquetes que si tenemos que enviar al navegador. 
+* npm run webpack --> genera la compilacion
+* npm start --> inicia la App
